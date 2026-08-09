@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soumnelle Collection — Prêt-à-porter modeste</title>
+<meta name="description" content="Soumnelle Collection — ensembles et robes en petites séries. Commande simple et rapide via WhatsApp, livraison dans les 58 wilayas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#F6F1E9;
+    --ivory-2:#EFE7D9;
+    --ink:#352C24;
+    --ink-soft:#6E6255;
+    --line:#E1D5C2;
+    --sage:#7E8A6C;
+    --sage-dark:#5F6B4F;
+    --clay:#B48A63;
+    --white:#FFFDF9;
+    --danger:#A9573F;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    margin:0;
+  }
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:.28em;
+    font-size:.68rem;
+    color:var(--ink-soft);
+    font-weight:500;
+  }
+  a{color:inherit;}
+  img{display:block;max-width:100%;}
+  select{ font-family:'Jost',sans-serif; }
+
+  /* ===== NAV ===== */
+  header.nav{
+    position:sticky; top:0; z-index:40;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px clamp(20px,5vw,64px);
+    background:rgba(246,241,233,.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-logo{height:34px;width:auto;}
+  .nav-links{display:flex; align-items:center; gap:28px; font-size:.82rem; letter-spacing:.05em;}
+  .nav-links a{text-decoration:none; color:var(--ink-soft); transition:color .2s;}
+  .nav-links a:hover{color:var(--ink);}
+  .cart-btn{
+    position:relative;
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--ink); color:var(--white);
+    border:none; padding:10px 16px;
+    font-size:.76rem; letter-spacing:.1em; text-transform:uppercase;
+    border-radius:var(--radius); cursor:pointer;
+    transition:background .2s;
+  }
+  .cart-btn:hover{ background:var(--sage-dark);}
+  .cart-count{
+    background:var(--clay); color:var(--white);
+    border-radius:50%; width:19px; height:19px;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:.68rem; font-weight:500;
+  }
+  .cart-count[data-empty="true"]{ display:none;}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    padding:88px clamp(20px,6vw,64px) 64px;
+    text-align:center;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(126,138,108,.10), transparent 45%),
+      radial-gradient(circle at 85% 75%, rgba(180,138,99,.14), transparent 50%);
+    pointer-events:none;
+  }
+  .hero-logo{ max-width:280px; margin:0 auto 26px; position:relative;}
+  .hero h1{
+    font-size:clamp(1.9rem, 4vw, 3rem);
+    line-height:1.15;
+    max-width:720px;
+    margin:18px auto 20px;
+    position:relative;
+  }
+  .hero h1 em{font-style:italic; color:var(--sage-dark);}
+  .hero p{
+    max-width:480px; margin:0 auto 34px;
+    color:var(--ink-soft);
+    font-size:1rem; line-height:1.7;
+    position:relative;
+  }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:14px 30px;
+    background:var(--ink);
+    color:var(--white);
+    text-decoration:none;
+    font-size:.78rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    border:none;
+    border-radius:var(--radius);
+    cursor:pointer;
+    transition:background .2s, transform .2s;
+  }
+  .btn:hover{background:var(--sage-dark); transform:translateY(-1px);}
+  .btn-ghost{
+    background:var(--ivory-2); color:var(--ink);
+  }
+  .btn-ghost:hover{ background:var(--line); transform:none;}
+  .btn:disabled{opacity:.4; cursor:not-allowed; transform:none;}
+
+  .strip{
+    display:flex; justify-content:center; gap:clamp(24px,6vw,72px);
+    flex-wrap:wrap;
+    padding:22px 20px;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  /* ===== SECTION ===== */
+  .section{ padding:80px clamp(20px,6vw,64px); max-width:1180px; margin:0 auto;}
+  .section-head{ text-align:center; margin-bottom:52px;}
+  .section-head h2{ font-size:clamp(1.7rem,3vw,2.4rem); margin-top:10px;}
+  .section-head p{color:var(--ink-soft); max-width:460px; margin:14px auto 0; font-size:.95rem; line-height:1.6;}
+
+  /* ===== PRODUCT CARD ===== */
+  .products{ display:flex; flex-direction:column; gap:96px;}
+  .product{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px;
+    align-items:flex-start;
+  }
+  .product:nth-child(2n) .p-gallery{ order:2;}
+  .p-gallery{position:relative;}
+  .p-main{
+    width:100%; aspect-ratio:3/4; object-fit:cover;
+    background:var(--ivory-2);
+    border-radius:var(--radius);
+  }
+  .p-badge{
+    position:absolute; top:16px; left:16px;
+    background:var(--white); padding:6px 14px;
+    font-size:.68rem; letter-spacing:.14em; text-transform:uppercase;
+    border-radius:2px; color:var(--sage-dark);
+    box-shadow:0 2px 10px rgba(53,44,36,.08);
+  }
+  .p-thumbs{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
+  .p-thumb{
+    width:56px; height:56px; border-radius:50%;
+    border:2px solid transparent; cursor:pointer;
+    background-size:cover; background-position:center;
+    position:relative; flex-shrink:0;
+    transition:border-color .2s, transform .2s;
+  }
+  .p-thumb.no-photo{
+    display:flex; align-items:center; justify-content:center;
+    font-size:.55rem; text-align:center; color:var(--white); line-height:1.1;
+    padding:2px;
+  }
+  .p-thumb.active{ border-color:var(--sage-dark); transform:scale(1.08);}
+
+  .p-info{ padding-top:6px;}
+  .p-name{ font-size:clamp(1.5rem,2.4vw,2rem); margin-bottom:6px;}
+  .p-price{ font-family:'Jost',sans-serif; font-size:1.15rem; color:var(--clay); font-weight:500; margin-bottom:18px;}
+  .p-desc{ color:var(--ink-soft); font-size:.92rem; line-height:1.75; margin-bottom:28px; max-width:420px;}
+
+  .field-label{
+    font-size:.7rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:10px; display:block;
+  }
+  .row{margin-bottom:26px;}
+  .color-options{ display:flex; gap:12px; flex-wrap:wrap; align-items:center;}
+  .swatch{
+    width:30px; height:30px; border-radius:50%;
+    border:2px solid transparent; cursor:pointer;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);
+    position:relative;
+    transition:transform .15s, border-color .15s;
+  }
+  .swatch.selected{ border-color:var(--ink); transform:scale(1.12);}
+
+  .size-options{ display:flex; gap:10px; flex-wrap:wrap;}
+  .size-pill{
+    min-width:44px; padding:9px 4px;
+    text-align:center;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    cursor:pointer; font-size:.82rem;
+    background:var(--white);
+    transition:all .15s;
+  }
+  .size-pill:hover{ border-color:var(--ink);}
+  .size-pill.selected{ background:var(--ink); color:var(--white); border-color:var(--ink);}
+
+  .qty-ctrl{ display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:var(--radius); background:var(--white);}
+  .qty-ctrl button{
+    width:36px; height:36px; background:none; border:none; cursor:pointer;
+    font-size:1rem; color:var(--ink);
+  }
+  .qty-ctrl span{ min-width:28px; text-align:center; font-size:.9rem; display:inline-block;}
+
+  .p-actions{ margin-top:30px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .p-note{ font-size:.74rem; color:#A6957F; margin-top:14px;}
+
+  /* ===== ABOUT ===== */
+  .about{ background:var(--white); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .about-inner{ max-width:760px; margin:0 auto; padding:80px 24px; text-align:center;}
+  .about h2{ font-size:clamp(1.6rem,3vw,2.2rem); margin:14px 0 20px;}
+  .about p{ color:var(--ink-soft); font-size:.98rem; line-height:1.85;}
+
+  /* ===== FOOTER ===== */
+  footer{ padding:60px clamp(20px,6vw,64px) 34px; text-align:center;}
+  .footer-logo{ max-width:170px; margin:0 auto 22px; opacity:.9;}
+  .socials{ display:flex; justify-content:center; gap:22px; margin:22px 0; font-size:.85rem;}
+  .socials a{ text-decoration:none; color:var(--ink-soft); border-bottom:1px solid transparent;}
+  .socials a:hover{ color:var(--ink); border-color:var(--ink);}
+  .copyright{ color:#A6957F; font-size:.72rem; margin-top:18px; letter-spacing:.04em;}
+
+  /* ===== DRAWER (panier) ===== */
+  .overlay{
+    position:fixed; inset:0; background:rgba(53,44,36,.42);
+    opacity:0; pointer-events:none; transition:opacity .25s;
+    z-index:60;
+  }
+  .overlay.open{ opacity:1; pointer-events:auto;}
+  .drawer{
+    position:fixed; top:0; right:0; height:100%;
+    width:min(460px,94vw);
+    background:var(--ivory);
+    box-shadow:-14px 0 40px rgba(0,0,0,.15);
+    transform:translateX(100%);
+    transition:transform .3s ease;
+    z-index:61;
+    display:flex; flex-direction:column;
+  }
+  .drawer.open{ transform:translateX(0);}
+  .drawer-head{
+    padding:22px 26px; border-bottom:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+    flex-shrink:0;
+  }
+  .drawer-head h3{ font-size:1.35rem;}
+  .drawer-close{ background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--ink-soft); line-height:1;}
+  .drawer-body{ padding:22px 26px; flex:1; overflow-y:auto;}
+  .drawer-empty{ text-align:center; color:var(--ink-soft); padding:50px 10px; font-size:.9rem;}
+
+  .cart-item{
+    display:flex; gap:12px; background:var(--white); padding:12px;
+    border-radius:var(--radius); margin-bottom:12px; border:1px solid var(--line);
+  }
+  .cart-item img{ width:56px; height:70px; object-fit:cover; border-radius:2px; background:var(--ivory-2); flex-shrink:0;}
+  .cart-item-body{ flex:1; min-width:0;}
+  .cart-item-body strong{ font-family:'Cormorant Garamond',serif; font-size:1rem; display:block;}
+  .cart-item-meta{ font-size:.76rem; color:var(--ink-soft); margin:2px 0 8px;}
+  .cart-item-row{ display:flex; align-items:center; justify-content:space-between;}
+  .cart-item-price{ font-size:.85rem; color:var(--clay); font-weight:500;}
+  .cart-remove{ background:none; border:none; color:var(--danger); font-size:.72rem; cursor:pointer; text-decoration:underline; padding:0;}
+  .cart-item .qty-ctrl button{ width:28px; height:28px; font-size:.85rem;}
+
+  .divider{ border:none; border-top:1px dashed var(--line); margin:22px 0;}
+
+  .form-field{ margin-bottom:18px;}
+  .form-field label{ display:block; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;}
+  .form-field input, .form-field select, .form-field textarea{
+    width:100%; padding:12px 14px; border:1px solid var(--line);
+    background:var(--white); border-radius:var(--radius);
+    font-family:'Jost',sans-serif; font-size:.92rem; color:var(--ink);
+  }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus{ outline:none; border-color:var(--sage-dark);}
+
+  .delivery-options{ display:flex; flex-direction:column; gap:10px;}
+  .delivery-option{
+    display:flex; align-items:center; gap:10px;
+    border:1px solid var(--line); border-radius:var(--radius);
+    padding:12px 14px; cursor:pointer; background:var(--white);
+    font-size:.86rem; transition:border-color .15s;
+  }
+  .delivery-option.selected{ border-color:var(--sage-dark); background:#FBFAF6;}
+  .delivery-option input{ accent-color:var(--sage-dark);}
+  .delivery-option .dprice{ margin-left:auto; color:var(--clay); font-weight:500;}
+  #address-field{ display:none; }
+  #address-field.show{ display:block; }
+
+  .totals{ margin-top:6px;}
+  .total-line{ display:flex; justify-content:space-between; font-size:.85rem; color:var(--ink-soft); padding:6px 0;}
+  .total-line.grand{
+    border-top:1px solid var(--line); margin-top:8px; padding-top:14px;
+    align-items:baseline;
+  }
+  .total-line.grand span:first-child{ font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft);}
+  .total-line.grand span:last-child{ font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:var(--clay);}
+
+  .send-btn{ width:100%; margin-top:16px; background:var(--sage-dark);}
+  .send-btn:hover{ background:var(--ink);}
+  .drawer-note{ font-size:.75rem; color:#A6957F; margin-top:14px; line-height:1.6; text-align:center;}
+  .drawer-foot{ padding:18px 26px 24px; border-top:1px solid var(--line); flex-shrink:0;}
+
+  .toast{
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:var(--white);
+    padding:12px 22px; border-radius:var(--radius);
+    font-size:.82rem; letter-spacing:.02em;
+    opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+    z-index:80;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0);}
+
+  @media(max-width:860px){
+    .product{ grid-template-columns:1fr; gap:26px;}
+    .product:nth-child(2n) .p-gallery{ order:0;}
+    .nav-links{ gap:14px;}
+  }
+  @media(prefers-reduced-motion: reduce){
+    *{ transition:none !important; scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <img src="images/logo.jpg" alt="Soumnelle Collection" class="nav-logo">
+  <nav class="nav-links">
+    <a href="#collection">Collection</a>
+    <a href="#apropos">À propos</a>
+    <button class="cart-btn" id="open-cart">
+      Panier <span class="cart-count" id="cart-count" data-empty="true">0</span>
+    </button>
+  </nav>
+</header>
+
+<section class="hero">
+  <img src="images/logo.jpg" alt="pour soumnelle — Collection" class="hero-logo">
+  <h1>Des pièces pensées pour <em>elle</em>, taillées pour durer.</h1>
+  <p>Ensembles et robes en petites séries, en gaze de coton légère. Ajoutez vos articles au panier, la commande se confirme en un message.</p>
+  <a href="#collection" class="btn">Découvrir la collection</a>
+</section>
+
+<div class="strip">
+  <span>Livraison 58 wilayas</span>
+  <span>Paiement à la livraison</span>
+  <span>Bureau ou domicile au choix</span>
+</div>
+
+<section class="section" id="collection">
+  <div class="section-head">
+    <span class="eyebrow">La collection</span>
+    <h2>Nouveautés de saison</h2>
+    <p>Choisissez une couleur, une taille, puis ajoutez au panier. Vous pouvez commander plusieurs articles en une seule fois.</p>
+  </div>
+
+  <div class="products" id="product-list"></div>
+</section>
+
+<section class="about" id="apropos">
+  <div class="about-inner">
+    <span class="eyebrow">Le tissu</span>
+    <h2>Une gaze de coton pensée pour l'été</h2>
+    <p>Légère, aérée et infroissable, la gaze de coton s'adoucit à chaque lavage. Coupes amples et longueurs généreuses, pour des silhouettes couvrantes et confortables, du matin jusqu'au soir.</p>
+  </div>
+</section>
+
+<footer>
+  <img src="images/logo.jpg" alt="Soumnelle Collection" class="footer-logo">
+  <div class="socials">
+    <a href="https://instagram.com/soumnel_pourelle" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://tiktok.com/@soumnel_pourelle" target="_blank" rel="noopener">TikTok</a>
+    <a href="#" id="footer-whatsapp">WhatsApp</a>
+  </div>
+  <p class="copyright">© <span id="year"></span> Soumnelle Collection — Alger, Algérie</p>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>Votre panier</h3>
+    <button class="drawer-close" id="drawer-close" aria-label="Fermer">&times;</button>
+  </div>
+  <div class="drawer-body">
+    <div id="cart-empty" class="drawer-empty">Votre panier est vide pour le moment.<br>Ajoutez un article depuis la collection.</div>
+    <div id="cart-success" class="drawer-empty" style="display:none;">
+      <div style="font-size:2rem; margin-bottom:10px;">❤️</div>
+      <strong style="font-family:'Cormorant Garamond',serif; font-size:1.2rem; color:var(--ink);">Merci pour votre confiance</strong>
+      <p style="margin-top:10px;">Nous avons bien reçu votre commande et vous contacterons très vite pour la confirmer.</p>
+    </div>
+    <div id="cart-items"></div>
+
+    <div id="checkout-block" style="display:none;">
+      <hr class="divider">
+
+      <div class="form-field">
+        <label for="d-nom">Nom et prénom</label>
+        <input id="d-nom" type="text" placeholder="Ex : Amina Bensalah">
+      </div>
+      <div class="form-field">
+        <label for="d-tel">Téléphone</label>
+        <input id="d-tel" type="tel" inputmode="numeric" maxlength="10" placeholder="05XXXXXXXX (10 chiffres)">
+      </div>
+      <div class="form-field">
+        <label for="d-wilaya">Wilaya</label>
+        <select id="d-wilaya"><option value="">Sélectionnez votre wilaya</option></select>
+      </div>
+
+      <div class="form-field">
+        <label>Mode de livraison</label>
+        <div class="delivery-options" id="delivery-options">
+          <label class="delivery-option" data-mode="bureau">
+            <input type="radio" name="delivery" value="bureau">
+            Retrait au bureau (Stop Desk)
+            <span class="dprice" id="price-bureau">—</span>
+          </label>
+          <label class="delivery-option" data-mode="domicile">
+            <input type="radio" name="delivery" value="domicile">
+            Livraison à domicile
+            <span class="dprice" id="price-domicile">—</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-field" id="address-field">
+        <label for="d-adresse">Adresse complète</label>
+        <textarea id="d-adresse" rows="2" placeholder="Rue, quartier, commune..."></textarea>
+      </div>
+
+      <div class="totals">
+        <div class="total-line"><span>Sous-total articles</span><span id="t-subtotal">0 DA</span></div>
+        <div class="total-line"><span>Livraison</span><span id="t-delivery">—</span></div>
+        <div class="total-line grand"><span>Total à payer</span><span id="t-grand">0 DA</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-foot" id="drawer-foot" style="display:none;">
+    <button class="btn send-btn" id="d-send">Confirmer la commande</button>
+    <p class="drawer-note">En confirmant, votre commande est transmise instantanément à la boutique. Vous recevrez une confirmation directement du vendeur.</p>
+  </div>
+</aside>
+
+<div class="toast" id="toast">Article ajouté au panier</div>
+
+<script>
+/* =========================================================
+   CONFIGURATION BOUTIQUE
+   - WHATSAPP_NUMBER : votre numéro, format international
+     SANS le +, ex Algérie : 213551234567
+   - Pour ajouter un nouvel article lors d'une nouvelle
+     collection : copiez un objet du tableau PRODUCTS et
+     modifiez ses champs + ajoutez les photos dans /images
+   - Tarifs de livraison (WILAYAS) : issus de la grille
+     "Tarif Stop Desk Classique" (bureau) et
+     "Tarif à Domicile Classique" (domicile). A mettre à
+     jour si votre transporteur change ses tarifs.
+   ========================================================= */
+const WHATSAPP_NUMBER = "213560606352";
+
+// Adresse de votre serveur de notification (voir dossier /backend).
+// A remplacer par l'adresse Render une fois le serveur déployé,
+// ex: "https://soumnelle-order-notifier.onrender.com/api/order"
+const BACKEND_URL = "";
+
+const PRODUCTS = [
+  {
+    id: "ensemble-brise",
+    name: "Ensemble Brise",
+    price: 4500,
+    sizes: ["S", "M", "L", "XL"],
+    badge: "Disponible",
+    description: "Chemise ample à manches longues et pantalon large assorti, en gaze de coton légère. Coupe oversize et infroissable, portée ici avec un foulard assorti.",
+    colors: [
+      { name: "Bleu ciel", hex: "#AFC8DE", img: "images/ensemble-bleu.jpg" },
+      { name: "Beige", hex: "#E3D6BC", img: "images/ensemble-beige.jpg" }
+    ]
+  },
+  {
+    id: "ensemble-samer",
+    name: "Ensemble Samer",
+    price: 3700,
+    sizes: ["36", "38", "40", "42"],
+    badge: "Nouveauté",
+    description: "Robe cintrée à la taille avec ceinture en macramé et fentes latérales, portée sur un pantalon large. Une silhouette fluide et couvrante, du bureau aux sorties du soir.",
+    colors: [
+      { name: "Vert", hex: "#93A184", img: "images/samer-vert.jpg" },
+      { name: "Bleu", hex: "#7C93AD", img: null },
+      { name: "Blanc", hex: "#F2EFEA", img: "images/samer-blanc.jpg" },
+      { name: "Marron", hex: "#5C4A3D", img: "images/samer-marron.jpg" },
+      { name: "Noir", hex: "#2B2B2B", img: "images/samer-noir.jpg" },
+      { name: "Beige", hex: "#C9AD8C", img: "images/samer-beige-1.jpg" }
+    ]
+  }
+];
+
+// Tarifs de livraison World Express — colonnes "Classique" (bureau / domicile), en DA
+const WILAYAS = [
+  {code:1,  name:"Adrar", bureau:1100, domicile:1400},
+  {code:2,  name:"Chlef", bureau:450,  domicile:700},
+  {code:3,  name:"Laghouat", bureau:700, domicile:1000},
+  {code:4,  name:"Oum El Bouaghi", bureau:500, domicile:850},
+  {code:5,  name:"Batna", bureau:500, domicile:850},
+  {code:6,  name:"Béjaïa", bureau:500, domicile:850},
+  {code:7,  name:"Biskra", bureau:600, domicile:950},
+  {code:8,  name:"Béchar", bureau:1100, domicile:1400},
+  {code:9,  name:"Blida", bureau:450, domicile:700},
+  {code:10, name:"Bouira", bureau:450, domicile:850},
+  {code:11, name:"Tamanrasset", bureau:1400, domicile:1800},
+  {code:12, name:"Tébessa", bureau:600, domicile:950},
+  {code:13, name:"Tlemcen", bureau:500, domicile:850},
+  {code:14, name:"Tiaret", bureau:500, domicile:850},
+  {code:15, name:"Tizi Ouzou", bureau:450, domicile:850},
+  {code:16, name:"Alger", bureau:400, domicile:500},
+  {code:17, name:"Djelfa", bureau:600, domicile:900},
+  {code:18, name:"Jijel", bureau:500, domicile:850},
+  {code:19, name:"Sétif", bureau:450, domicile:850},
+  {code:20, name:"Saïda", bureau:600, domicile:900},
+  {code:21, name:"Skikda", bureau:500, domicile:850},
+  {code:22, name:"Sidi Bel Abbès", bureau:500, domicile:850},
+  {code:23, name:"Annaba", bureau:500, domicile:850},
+  {code:24, name:"Guelma", bureau:600, domicile:900},
+  {code:25, name:"Constantine", bureau:450, domicile:850},
+  {code:26, name:"Médéa", bureau:450, domicile:850},
+  {code:27, name:"Mostaganem", bureau:500, domicile:850},
+  {code:28, name:"M'Sila", bureau:500, domicile:850},
+  {code:29, name:"Mascara", bureau:600, domicile:900},
+  {code:30, name:"Ouargla", bureau:800, domicile:1100},
+  {code:31, name:"Oran", bureau:450, domicile:850},
+  {code:32, name:"El Bayadh", bureau:800, domicile:1100},
+  {code:33, name:"Illizi", bureau:1700, domicile:2000},
+  {code:34, name:"Bordj Bou Arreridj", bureau:450, domicile:850},
+  {code:35, name:"Boumerdès", bureau:450, domicile:700},
+  {code:36, name:"El Tarf", bureau:600, domicile:950},
+  {code:37, name:"Tindouf", bureau:1400, domicile:2000},
+  {code:38, name:"Tissemsilt", bureau:500, domicile:850},
+  {code:39, name:"El Oued", bureau:800, domicile:1100},
+  {code:40, name:"Khenchela", bureau:600, domicile:900},
+  {code:41, name:"Souk Ahras", bureau:600, domicile:900},
+  {code:42, name:"Tipaza", bureau:450, domicile:700},
+  {code:43, name:"Mila", bureau:500, domicile:850},
+  {code:44, name:"Aïn Defla", bureau:450, domicile:850},
+  {code:45, name:"Naâma", bureau:800, domicile:1100},
+  {code:46, name:"Aïn Témouchent", bureau:600, domicile:900},
+  {code:47, name:"Ghardaïa", bureau:800, domicile:1100},
+  {code:48, name:"Relizane", bureau:500, domicile:850},
+  {code:49, name:"Timimoun", bureau:1100, domicile:1400},
+  {code:50, name:"Bordj Badji Mokhtar", bureau:1700, domicile:2000},
+  {code:51, name:"Ouled Djellal", bureau:700, domicile:1000},
+  {code:52, name:"Béni Abbès", bureau:1100, domicile:1400},
+  {code:53, name:"In Salah", bureau:1100, domicile:1400},
+  {code:54, name:"In Guezzam", bureau:1700, domicile:2000},
+  {code:55, name:"Touggourt", bureau:800, domicile:1100},
+  {code:56, name:"Djanet", bureau:1700, domicile:2000},
+  {code:57, name:"El M'Ghair", bureau:800, domicile:1100},
+  {code:58, name:"El Meniaa", bureau:1000, domicile:1300}
+].sort((a,b)=> a.name.localeCompare(b.name,'fr'));
+
+/* ===== Product cards render ===== */
+const list = document.getElementById("product-list");
+const pState = {}; // per product: {colorIdx, size, qty}
+
+PRODUCTS.forEach((p) => {
+  pState[p.id] = { colorIdx: 0, size: null, qty: 1 };
+
+  const el = document.createElement("article");
+  el.className = "product";
+  el.innerHTML = `
+    <div class="p-gallery">
+      <span class="p-badge">${p.badge}</span>
+      <img class="p-main" id="main-${p.id}" src="${p.colors[0].img || ''}" alt="${p.name} — ${p.colors[0].name}"
+        style="${p.colors[0].img ? '' : 'background:'+p.colors[0].hex+';'}">
+      <div class="p-thumbs">
+        ${p.colors.map((c, i) => `
+          <div class="p-thumb ${i===0?'active':''} ${c.img?'':'no-photo'}"
+               data-product="${p.id}" data-idx="${i}"
+               style="${c.img ? `background-image:url('${c.img}')` : `background:${c.hex}`}">
+               ${c.img ? '' : 'photo à venir'}
+          </div>
+        `).join("")}
+      </div>
+    </div>
+    <div class="p-info">
+      <h3 class="p-name serif">${p.name}</h3>
+      <div class="p-price">${p.price.toLocaleString('fr-FR')} DA</div>
+      <p class="p-desc">${p.description}</p>
+
+      <div class="row">
+        <span class="field-label">Couleur — <span id="colorlabel-${p.id}">${p.colors[0].name}</span></span>
+        <div class="color-options">
+          ${p.colors.map((c,i) => `
+            <span class="swatch ${i===0?'selected':''}" data-product="${p.id}" data-idx="${i}"
+              style="background:${c.hex}" title="${c.name}"></span>
+          `).join("")}
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="field-label">Taille</span>
+        <div class="size-options" id="sizes-${p.id}">
+          ${p.sizes.map(s => `<div class="size-pill" data-product="${p.id}" data-size="${s}">${s}</div>`).join("")}
+        </div>
+      </div>
+
+      <div class="p-actions">
+        <div class="qty-ctrl" data-qty-for="${p.id}">
+          <button type="button" data-qty="minus" data-product="${p.id}">−</button>
+          <span id="qty-${p.id}">1</span>
+          <button type="button" data-qty="plus" data-product="${p.id}">+</button>
+        </div>
+        <button class="btn" data-add="${p.id}">Ajouter au panier</button>
+      </div>
+      <p class="p-note">Sélectionnez une taille avant d'ajouter au panier.</p>
+    </div>
+  `;
+  list.appendChild(el);
+});
+
+document.querySelectorAll(".swatch, .p-thumb").forEach(node => {
+  node.addEventListener("click", () => {
+    const pid = node.dataset.product;
+    const idx = parseInt(node.dataset.idx, 10);
+    const product = PRODUCTS.find(p => p.id === pid);
+    pState[pid].colorIdx = idx;
+
+    document.querySelectorAll(`.swatch[data-product="${pid}"]`).forEach((s,i)=>s.classList.toggle("selected", i===idx));
+    document.querySelectorAll(`.p-thumb[data-product="${pid}"]`).forEach((t,i)=>t.classList.toggle("active", i===idx));
+    document.getElementById(`colorlabel-${pid}`).textContent = product.colors[idx].name;
+
+    const mainImg = document.getElementById(`main-${pid}`);
+    const c = product.colors[idx];
+    if (c.img) { mainImg.src = c.img; mainImg.style.background = ""; }
+    else { mainImg.removeAttribute("src"); mainImg.style.background = c.hex; }
+  });
+});
+
+document.querySelectorAll(".size-pill").forEach(pill => {
+  pill.addEventListener("click", () => {
+    const pid = pill.dataset.product;
+    document.querySelectorAll(`.size-pill[data-product="${pid}"]`).forEach(s => s.classList.remove("selected"));
+    pill.classList.add("selected");
+    pState[pid].size = pill.dataset.size;
+  });
+});
+
+document.querySelectorAll('[data-qty]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const pid = btn.dataset.product;
+    const s = pState[pid];
+    if (btn.dataset.qty === 'plus') s.qty += 1;
+    else s.qty = Math.max(1, s.qty - 1);
+    document.getElementById(`qty-${pid}`).textContent = s.qty;
+  });
+});
+
+/* ===== Panier (cart) ===== */
+const cart = []; // {key, productId, name, colorName, colorImg, colorHex, size, qty, price}
+
+function cartKey(pid, colorName, size){ return `${pid}__${colorName}__${size}`; }
+
+document.querySelectorAll('[data-add]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const pid = btn.dataset.add;
+    const p = PRODUCTS.find(x => x.id === pid);
+    const s = pState[pid];
+    if(!s.size){
+      alert("Merci de choisir une taille avant d'ajouter au panier.");
+      return;
+    }
+    const color = p.colors[s.colorIdx];
+    const key = cartKey(pid, color.name, s.size);
+    const existing = cart.find(item => item.key === key);
+    if(existing){ existing.qty += s.qty; }
+    else {
+      cart.push({
+        key, productId: pid, name: p.name,
+        colorName: color.name, colorImg: color.img, colorHex: color.hex,
+        size: s.size, qty: s.qty, price: p.price
+      });
+    }
+    s.qty = 1;
+    document.getElementById(`qty-${pid}`).textContent = "1";
+    renderCart();
+    showToast(`${p.name} ajouté au panier`);
+  });
+});
+
+const cartCountEl = document.getElementById('cart-count');
+const cartItemsEl = document.getElementById('cart-items');
+const cartEmptyEl = document.getElementById('cart-empty');
+const checkoutBlock = document.getElementById('checkout-block');
+const drawerFoot = document.getElementById('drawer-foot');
+
+function renderCart(){
+  const totalQty = cart.reduce((sum,i)=>sum+i.qty,0);
+  cartCountEl.textContent = totalQty;
+  cartCountEl.dataset.empty = totalQty === 0 ? "true" : "false";
+
+  document.getElementById('cart-success').style.display = 'none';
+
+  if(cart.length === 0){
+    cartEmptyEl.style.display = 'block';
+    cartItemsEl.innerHTML = '';
+    checkoutBlock.style.display = 'none';
+    drawerFoot.style.display = 'none';
+    return;
+  }
+  cartEmptyEl.style.display = 'none';
+  checkoutBlock.style.display = 'block';
+  drawerFoot.style.display = 'block';
+
+  cartItemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <img src="${item.colorImg || ''}" alt="${item.name}" style="${item.colorImg ? '' : 'background:'+item.colorHex+';'}">
+      <div class="cart-item-body">
+        <strong>${item.name}</strong>
+        <div class="cart-item-meta">${item.colorName} · Taille ${item.size}</div>
+        <div class="cart-item-row">
+          <div class="qty-ctrl">
+            <button type="button" data-cart-qty="minus" data-key="${item.key}">−</button>
+            <span>${item.qty}</span>
+            <button type="button" data-cart-qty="plus" data-key="${item.key}">+</button>
+          </div>
+          <span class="cart-item-price">${(item.price*item.qty).toLocaleString('fr-FR')} DA</span>
+        </div>
+        <button class="cart-remove" data-remove="${item.key}">Retirer</button>
+      </div>
+    </div>
+  `).join('');
+
+  cartItemsEl.querySelectorAll('[data-cart-qty]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const item = cart.find(i=>i.key===btn.dataset.key);
+      if(btn.dataset.cartQty === 'plus') item.qty += 1;
+      else item.qty = Math.max(1, item.qty - 1);
+      renderCart();
+      updateTotals();
+    });
+  });
+  cartItemsEl.querySelectorAll('[data-remove]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const idx = cart.findIndex(i=>i.key===btn.dataset.remove);
+      if(idx > -1) cart.splice(idx,1);
+      renderCart();
+      updateTotals();
+    });
+  });
+
+  updateTotals();
+}
+
+/* ===== Wilaya select + livraison ===== */
+const wilayaSelect = document.getElementById('d-wilaya');
+WILAYAS.forEach(w=>{
+  const opt = document.createElement('option');
+  opt.value = w.code;
+  opt.textContent = `${String(w.code).padStart(2,'0')} — ${w.name}`;
+  wilayaSelect.appendChild(opt);
+});
+
+let deliveryMode = null; // 'bureau' | 'domicile'
+
+function currentWilaya(){
+  const code = parseInt(wilayaSelect.value, 10);
+  return WILAYAS.find(w => w.code === code) || null;
+}
+
+function refreshDeliveryPrices(){
+  const w = currentWilaya();
+  document.getElementById('price-bureau').textContent = w ? w.bureau.toLocaleString('fr-FR') + ' DA' : '—';
+  document.getElementById('price-domicile').textContent = w ? w.domicile.toLocaleString('fr-FR') + ' DA' : '—';
+}
+wilayaSelect.addEventListener('change', ()=>{ refreshDeliveryPrices(); updateTotals(); });
+
+document.querySelectorAll('.delivery-option').forEach(opt=>{
+  opt.addEventListener('click', ()=>{
+    const radio = opt.querySelector('input[type=radio]');
+    radio.checked = true;
+    deliveryMode = opt.dataset.mode;
+    document.querySelectorAll('.delivery-option').forEach(o=>o.classList.toggle('selected', o===opt));
+    const addressField = document.getElementById('address-field');
+    addressField.classList.toggle('show', deliveryMode === 'domicile');
+    updateTotals();
+  });
+});
+
+function updateTotals(){
+  const subtotal = cart.reduce((sum,i)=>sum + i.price*i.qty, 0);
+  document.getElementById('t-subtotal').textContent = subtotal.toLocaleString('fr-FR') + ' DA';
+
+  const w = currentWilaya();
+  let deliveryPrice = null;
+  if(w && deliveryMode){
+    deliveryPrice = deliveryMode === 'bureau' ? w.bureau : w.domicile;
+  }
+  document.getElementById('t-delivery').textContent = deliveryPrice !== null ? deliveryPrice.toLocaleString('fr-FR') + ' DA' : '—';
+
+  const grand = subtotal + (deliveryPrice || 0);
+  document.getElementById('t-grand').textContent = grand.toLocaleString('fr-FR') + ' DA';
+}
+
+/* ===== Drawer open/close ===== */
+const overlay = document.getElementById('overlay');
+const drawer = document.getElementById('drawer');
+
+function openCart(){ overlay.classList.add('open'); drawer.classList.add('open'); }
+function closeCart(){ overlay.classList.remove('open'); drawer.classList.remove('open'); }
+
+document.getElementById('open-cart').addEventListener('click', openCart);
+document.getElementById('drawer-close').addEventListener('click', closeCart);
+overlay.addEventListener('click', closeCart);
+
+/* ===== Toast ===== */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+/* ===== Envoi automatique de la commande ===== */
+const sendBtn = document.getElementById('d-send');
+
+function buildOrderData(){
+  const nom = document.getElementById('d-nom').value.trim();
+  const tel = document.getElementById('d-tel').value.trim();
+  const w = currentWilaya();
+  const adresse = document.getElementById('d-adresse').value.trim();
+
+  if(!nom){ alert("Merci de renseigner votre nom."); return null; }
+  if(!tel){ alert("Merci de renseigner votre numéro de téléphone."); return null; }
+  if(!/^[0-9]{10}$/.test(tel)){ alert("Le numéro de téléphone doit contenir uniquement des chiffres, exactement 10 chiffres (ex: 0551234567)."); return null; }
+  if(!w){ alert("Merci de sélectionner votre wilaya."); return null; }
+  if(!deliveryMode){ alert("Merci de choisir un mode de livraison (bureau ou domicile)."); return null; }
+  if(deliveryMode === 'domicile' && !adresse){ alert("Merci de renseigner votre adresse pour la livraison à domicile."); return null; }
+
+  const subtotal = cart.reduce((sum,i)=>sum + i.price*i.qty, 0);
+  const deliveryPrice = deliveryMode === 'bureau' ? w.bureau : w.domicile;
+  const grand = subtotal + deliveryPrice;
+  const livraisonLabel = `${deliveryMode === 'bureau' ? 'Retrait au bureau' : 'Domicile'} — ${w.name}${deliveryMode === 'domicile' ? ' (' + adresse + ')' : ''}`;
+  const articlesLabel = cart.map(item =>
+    `${item.name} (${item.colorName}, taille ${item.size}, x${item.qty}, ${(item.price*item.qty).toLocaleString('fr-FR')} DA)`
+  ).join(" | ");
+
+  return {
+    api: { nom, telephone: tel, wilaya: w.name, livraison: livraisonLabel, articles: articlesLabel, total: grand.toLocaleString('fr-FR') + " DA" }
+  };
+}
+
+function showCartSuccess(){
+  document.getElementById('cart-items').innerHTML = '';
+  document.getElementById('checkout-block').style.display = 'none';
+  document.getElementById('drawer-foot').style.display = 'none';
+  document.getElementById('cart-empty').style.display = 'none';
+  document.getElementById('cart-success').style.display = 'block';
+  cart.length = 0;
+  renderCartCountOnly();
+}
+function renderCartCountOnly(){
+  cartCountEl.textContent = 0;
+  cartCountEl.dataset.empty = "true";
+}
+
+sendBtn.addEventListener('click', async () => {
+  if(cart.length === 0) return;
+  const data = buildOrderData();
+  if(!data) return;
+
+  if(!BACKEND_URL){
+    // Le serveur de commandes n'est pas encore branché côté vendeur.
+    alert("Désolé, la prise de commande n'est pas encore activée sur ce site. Merci de réessayer plus tard.");
+    return;
+  }
+
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Envoi en cours...";
+
+  try{
+    const res = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data.api)
+    });
+    if(!res.ok) throw new Error("Réponse serveur non valide");
+
+    // La cliente ne voit que le message de remerciement — jamais WhatsApp.
+    showCartSuccess();
+  } catch(err){
+    console.error(err);
+    alert("Votre commande n'a pas pu être envoyée. Merci de vérifier votre connexion et de réessayer.");
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = "Confirmer la commande";
+  }
+});
+
+document.getElementById('footer-whatsapp').addEventListener('click', (e) => {
+  e.preventDefault();
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}`, "_blank");
+});
+
+document.getElementById('year').textContent = new Date().getFullYear();
+renderCart();
+</script>
+</body>
+</html>
