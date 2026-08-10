@@ -201,6 +201,10 @@
     transition:transform .15s, border-color .15s;
   }
   .swatch.selected{ border-color:var(--ink); transform:scale(1.12);}
+  .swatch.swatch-soldout{
+    opacity:.35; cursor:not-allowed;
+    background-image:linear-gradient(135deg, transparent 45%, #A9573F 45%, #A9573F 55%, transparent 55%);
+  }
 
   .size-options{ display:flex; gap:10px; flex-wrap:wrap;}
   .size-pill{
@@ -214,6 +218,18 @@
   }
   .size-pill:hover{ border-color:var(--ink);}
   .size-pill.selected{ background:var(--ink); color:var(--white); border-color:var(--ink);}
+  .size-pill.sold-out{
+    opacity:1; cursor:not-allowed;
+    background:var(--ivory-2);
+    color:var(--danger);
+    font-size:.66rem;
+    letter-spacing:.02em;
+    font-weight:500;
+    min-width:68px;
+    white-space:normal;
+    line-height:1.2;
+  }
+  .size-pill.sold-out:hover{ border-color:var(--line);}
 
   .qty-ctrl{ display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:var(--radius); background:var(--white);}
   .qty-ctrl button{
@@ -477,7 +493,33 @@ const WHATSAPP_NUMBER = "213560606352";
 // Adresse de votre serveur de notification (voir dossier /backend).
 // A remplacer par l'adresse Render une fois le serveur déployé,
 // ex: "https://soumnelle-order-notifier.onrender.com/api/order"
-const BACKEND_URL = "";
+const BACKEND_URL = "https://soumnel.onrender.com/api/order";
+const STOCK_URL = BACKEND_URL ? BACKEND_URL.replace(/\/api\/order$/, "/api/stock") : "";
+
+// Rempli au chargement de la page depuis le serveur (clé "productId__couleur__taille" -> quantité restante).
+// Si une combinaison n'est pas dans cette liste, elle est considérée comme illimitée (non suivie en stock).
+let stockMap = {};
+function stockKey(pid, color, size){ return `${pid}__${color}__${size}`; }
+function remainingStock(pid, color, size){
+  const key = stockKey(pid, color, size);
+  return Object.prototype.hasOwnProperty.call(stockMap, key) ? stockMap[key] : Infinity;
+}
+async function loadStock(){
+  if(!STOCK_URL) return;
+  try{
+    const res = await fetch(STOCK_URL);
+    const data = await res.json();
+    if(data && data.ok && Array.isArray(data.stock)){
+      stockMap = {};
+      data.stock.forEach(row => {
+        stockMap[stockKey(row.product_id, row.color, row.size)] = row.quantity;
+      });
+    }
+  } catch(err){
+    console.error("Impossible de charger le stock :", err);
+  }
+  refreshAllStockDisplays();
+}
 
 const PRODUCTS = [
   {
@@ -496,16 +538,16 @@ const PRODUCTS = [
     id: "ensemble-samer",
     name: "Ensemble Samer",
     price: 3700,
-    sizes: ["36", "38", "40", "42"],
+    sizes: ["36", "38", "40", "42", "44"],
     badge: "Nouveauté",
     description: "Robe cintrée à la taille avec ceinture en macramé et fentes latérales, portée sur un pantalon large. Une silhouette fluide et couvrante, du bureau aux sorties du soir.",
     colors: [
       { name: "Vert", hex: "#93A184", img: "images/samer-vert.jpg" },
-      { name: "Bleu", hex: "#7C93AD", img: "images/samer-bleu.jpg" },
+      { name: "Bleu", hex: "#7C93AD", img: null },
       { name: "Blanc", hex: "#F2EFEA", img: "images/samer-blanc.jpg" },
       { name: "Marron", hex: "#5C4A3D", img: "images/samer-marron.jpg" },
       { name: "Noir", hex: "#2B2B2B", img: "images/samer-noir.jpg" },
-      { name: "Beige", hex: "#C9AD8C", img: "images/samer-beige.jpg" }
+      { name: "Beige", hex: "#C9AD8C", img: "images/samer-beige-1.jpg" }
     ]
   }
 ];
@@ -632,12 +674,58 @@ PRODUCTS.forEach((p) => {
   list.appendChild(el);
 });
 
+/* ===== Affichage du stock (couleurs / tailles épuisées) ===== */
+function refreshAllStockDisplays(){
+  PRODUCTS.forEach(p => refreshProductStockDisplay(p.id));
+}
+
+function refreshProductStockDisplay(pid){
+  const p = PRODUCTS.find(x => x.id === pid);
+  if(!p) return;
+
+  // Grise les couleurs entièrement épuisées (toutes tailles à 0)
+  document.querySelectorAll(`.swatch[data-product="${pid}"]`).forEach((swatchEl, idx) => {
+    const color = p.colors[idx];
+    const colorSoldOut = p.sizes.every(sz => remainingStock(pid, color.name, sz) <= 0);
+    swatchEl.classList.toggle('swatch-soldout', colorSoldOut);
+  });
+
+  refreshSizesForProduct(pid);
+}
+
+function refreshSizesForProduct(pid){
+  const p = PRODUCTS.find(x => x.id === pid);
+  if(!p) return;
+  const s = pState[pid];
+  const color = p.colors[s.colorIdx];
+
+  document.querySelectorAll(`.size-pill[data-product="${pid}"]`).forEach(pill => {
+    const size = pill.dataset.size;
+    const alreadyInCart = cart.filter(i => i.key === cartKey(pid, color.name, size)).reduce((sum,i)=>sum+i.qty,0);
+    const available = remainingStock(pid, color.name, size) - alreadyInCart;
+    const soldOut = available <= 0;
+    pill.classList.toggle('sold-out', soldOut);
+    pill.textContent = soldOut ? "Fin de stock" : size;
+    if(soldOut && pill.classList.contains('selected')){
+      pill.classList.remove('selected');
+      s.size = null;
+    }
+  });
+}
+
 document.querySelectorAll(".swatch, .p-thumb").forEach(node => {
   node.addEventListener("click", () => {
     const pid = node.dataset.product;
     const idx = parseInt(node.dataset.idx, 10);
     const product = PRODUCTS.find(p => p.id === pid);
+
+    if(node.classList.contains("swatch-soldout")){
+      showToast(`${product.colors[idx].name} — épuisé`);
+      return;
+    }
+
     pState[pid].colorIdx = idx;
+    pState[pid].size = null; // on change de couleur : la taille doit être resélectionnée
 
     document.querySelectorAll(`.swatch[data-product="${pid}"]`).forEach((s,i)=>s.classList.toggle("selected", i===idx));
     document.querySelectorAll(`.p-thumb[data-product="${pid}"]`).forEach((t,i)=>t.classList.toggle("active", i===idx));
@@ -647,11 +735,18 @@ document.querySelectorAll(".swatch, .p-thumb").forEach(node => {
     const c = product.colors[idx];
     if (c.img) { mainImg.src = c.img; mainImg.style.background = ""; }
     else { mainImg.removeAttribute("src"); mainImg.style.background = c.hex; }
+
+    document.querySelectorAll(`.size-pill[data-product="${pid}"]`).forEach(s => s.classList.remove("selected"));
+    refreshSizesForProduct(pid);
   });
 });
 
 document.querySelectorAll(".size-pill").forEach(pill => {
   pill.addEventListener("click", () => {
+    if(pill.classList.contains("sold-out")){
+      showToast("Cette taille n'est plus disponible");
+      return;
+    }
     const pid = pill.dataset.product;
     document.querySelectorAll(`.size-pill[data-product="${pid}"]`).forEach(s => s.classList.remove("selected"));
     pill.classList.add("selected");
@@ -663,7 +758,19 @@ document.querySelectorAll('[data-qty]').forEach(btn => {
   btn.addEventListener('click', () => {
     const pid = btn.dataset.product;
     const s = pState[pid];
-    if (btn.dataset.qty === 'plus') s.qty += 1;
+    if (btn.dataset.qty === 'plus') {
+      const p = PRODUCTS.find(x => x.id === pid);
+      const color = p.colors[s.colorIdx];
+      if(s.size){
+        const alreadyInCart = cart.filter(i => i.key === cartKey(pid, color.name, s.size)).reduce((sum,i)=>sum+i.qty,0);
+        const available = remainingStock(pid, color.name, s.size) - alreadyInCart;
+        if(s.qty >= available){
+          showToast("Quantité maximum disponible atteinte");
+          return;
+        }
+      }
+      s.qty += 1;
+    }
     else s.qty = Math.max(1, s.qty - 1);
     document.getElementById(`qty-${pid}`).textContent = s.qty;
   });
@@ -685,18 +792,32 @@ document.querySelectorAll('[data-add]').forEach(btn => {
     }
     const color = p.colors[s.colorIdx];
     const key = cartKey(pid, color.name, s.size);
+
+    const alreadyInCart = cart.filter(i => i.key === key).reduce((sum,i)=>sum+i.qty,0);
+    const available = remainingStock(pid, color.name, s.size) - alreadyInCart;
+    if(available <= 0){
+      alert("Désolé, cette couleur/taille n'est plus disponible.");
+      refreshSizesForProduct(pid);
+      return;
+    }
+    const qtyToAdd = Math.min(s.qty, available);
+    if(qtyToAdd < s.qty){
+      alert(`Il ne reste que ${available} pièce(s) disponible(s) pour cette taille — quantité ajustée.`);
+    }
+
     const existing = cart.find(item => item.key === key);
-    if(existing){ existing.qty += s.qty; }
+    if(existing){ existing.qty += qtyToAdd; }
     else {
       cart.push({
         key, productId: pid, name: p.name,
         colorName: color.name, colorImg: color.img, colorHex: color.hex,
-        size: s.size, qty: s.qty, price: p.price
+        size: s.size, qty: qtyToAdd, price: p.price
       });
     }
     s.qty = 1;
     document.getElementById(`qty-${pid}`).textContent = "1";
     renderCart();
+    refreshSizesForProduct(pid);
     showToast(`${p.name} ajouté au panier`);
   });
 });
@@ -747,18 +868,29 @@ function renderCart(){
   cartItemsEl.querySelectorAll('[data-cart-qty]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const item = cart.find(i=>i.key===btn.dataset.key);
-      if(btn.dataset.cartQty === 'plus') item.qty += 1;
+      if(btn.dataset.cartQty === 'plus'){
+        const totalOfThisCombo = cart.filter(i=>i.key===item.key).reduce((sum,i)=>sum+i.qty,0);
+        const available = remainingStock(item.productId, item.colorName, item.size);
+        if(totalOfThisCombo >= available){
+          showToast("Quantité maximum disponible atteinte");
+          return;
+        }
+        item.qty += 1;
+      }
       else item.qty = Math.max(1, item.qty - 1);
       renderCart();
       updateTotals();
+      refreshSizesForProduct(item.productId);
     });
   });
   cartItemsEl.querySelectorAll('[data-remove]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const idx = cart.findIndex(i=>i.key===btn.dataset.remove);
+      const removedProductId = idx > -1 ? cart[idx].productId : null;
       if(idx > -1) cart.splice(idx,1);
       renderCart();
       updateTotals();
+      if(removedProductId) refreshSizesForProduct(removedProductId);
     });
   });
 
@@ -860,8 +992,12 @@ function buildOrderData(){
     `${item.name} (${item.colorName}, taille ${item.size}, x${item.qty}, ${(item.price*item.qty).toLocaleString('fr-FR')} DA)`
   ).join(" | ");
 
+  const itemsPayload = cart.map(item => ({
+    product_id: item.productId, color: item.colorName, size: item.size, qty: item.qty
+  }));
+
   return {
-    api: { nom, telephone: tel, wilaya: w.name, livraison: livraisonLabel, articles: articlesLabel, total: grand.toLocaleString('fr-FR') + " DA" }
+    api: { nom, telephone: tel, wilaya: w.name, livraison: livraisonLabel, articles: articlesLabel, total: grand.toLocaleString('fr-FR') + " DA", items: itemsPayload }
   };
 }
 
@@ -899,10 +1035,19 @@ sendBtn.addEventListener('click', async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data.api)
     });
+
+    if(res.status === 409){
+      const body = await res.json().catch(()=>null);
+      await loadStock();
+      renderCart();
+      alert("Désolé, un ou plusieurs articles de votre panier viennent d'être vendus (stock épuisé entre-temps). Merci de vérifier votre panier et de réessayer.");
+      return;
+    }
     if(!res.ok) throw new Error("Réponse serveur non valide");
 
     // La cliente ne voit que le message de remerciement — jamais WhatsApp.
     showCartSuccess();
+    await loadStock();
   } catch(err){
     console.error(err);
     alert("Votre commande n'a pas pu être envoyée. Merci de vérifier votre connexion et de réessayer.");
@@ -919,6 +1064,7 @@ document.getElementById('footer-whatsapp').addEventListener('click', (e) => {
 
 document.getElementById('year').textContent = new Date().getFullYear();
 renderCart();
+loadStock();
 </script>
 </body>
 </html>
