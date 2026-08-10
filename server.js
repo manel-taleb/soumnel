@@ -119,6 +119,18 @@ const INITIAL_STOCK = [
   });
 });
 
+// Robe Victoria — tailles S/M/L, couleurs Beige et Brique
+["Beige", "Brique"].forEach((color) => {
+  ["S", "M", "L"].forEach((size) => {
+    INITIAL_STOCK.push(["robe-victoria", color, size, 0]);
+  });
+});
+
+// Robe d'Hôtesse — taille unique, couleurs Violet et Bleu
+["Violet", "Bleu"].forEach((color) => {
+  INITIAL_STOCK.push(["robe-hotesse", color, "Taille unique", 0]);
+});
+
 // Abaya Élégance — tailles groupées S/M et L/XL, couleurs Marron et Rose
 ["Marron", "Rose"].forEach((color) => {
   ["S/M", "L/XL"].forEach((size) => {
@@ -393,6 +405,8 @@ app.get("/admin/stock", (req, res) => {
   const productLabels = {
     "ensemble-brise": "Ensemble Brise",
     "ensemble-samer": "Ensemble Samer",
+    "robe-victoria": "Robe Victoria",
+    "robe-hotesse": "Robe d'Hôtesse",
     "abaya-elegance": "Abaya Élégance",
     "veste-bomber": "Veste en Similicuir Bomber",
   };
