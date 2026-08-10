@@ -60,31 +60,37 @@
   .nav-links{display:flex; align-items:center; gap:28px; font-size:.82rem; letter-spacing:.05em;}
   .nav-links a{text-decoration:none; color:var(--ink); font-weight:500; transition:color .2s;}
   .nav-links a:hover{color:var(--clay);}
+  
+  /* Bouton Panier */
   .cart-btn{
     position:relative;
     display:inline-flex; align-items:center; gap:8px;
-    background:var(--ink); color:var(--white);
-    border:none; padding:10px 18px;
-    font-size:.76rem; letter-spacing:.1em; text-transform:uppercase;
-    border-radius:var(--radius); cursor:pointer;
-    transition:background .2s;
+    background:transparent;
+    border:none; padding:6px;
+    cursor:pointer;
+    border-radius:var(--radius);
+    transition:transform .2s;
+    color: var(--ink);
   }
-  .cart-btn:hover{ background:var(--sage-dark);}
+  .cart-btn:hover{ transform:scale(1.08); color: var(--clay); }
+  .cart-icon{ width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
   .cart-count{
+    position:absolute; top:-2px; right:-6px;
     background:var(--clay); color:var(--white);
-    border-radius:50%; width:19px; height:19px;
+    border-radius:50%; width:18px; height:18px;
     display:inline-flex; align-items:center; justify-content:center;
-    font-size:.68rem; font-weight:500;
+    font-size:.65rem; font-weight:600;
   }
   .cart-count[data-empty="true"]{ display:none;}
 
-  /* ===== HERO WITH BACKGROUND IMAGE ===== */
+  /* ===== HERO ===== */
   .hero{
     position:relative;
     min-height:85vh;
     display:flex; flex-direction:column; justify-content:center; align-items:center;
     text-align:center;
     padding:120px 20px 80px;
+    background-color: var(--ink);
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.55)), url('images/hero-bg.jpg');
     background-size: cover;
     background-position: center;
@@ -127,8 +133,9 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   }
   .btn:hover{background:var(--ivory-2); transform:translateY(-2px);}
+  .btn:disabled{opacity:.5; cursor:not-allowed; transform:none;}
 
-  /* ===== BANDE DÉFILANTE DE GAUCHE À DROITE ===== */
+  /* ===== MARQUEE ===== */
   .marquee-container {
     width: 100%;
     overflow: hidden;
@@ -152,10 +159,7 @@
     align-items: center;
     gap: 20px;
   }
-  .marquee-item::after {
-    content: "•";
-    color: var(--clay);
-  }
+  .marquee-item::after { content: "•"; color: var(--clay); }
   @keyframes scrollLeftToRight {
     0% { transform: translateX(-50%); }
     100% { transform: translateX(0%); }
@@ -167,7 +171,7 @@
   .section-head h2{ font-size:clamp(1.8rem,3vw,2.6rem); margin-top:10px;}
   .section-head p{color:var(--ink-soft); max-width:480px; margin:14px auto 0; font-size:.95rem; line-height:1.6;}
 
-  /* ===== CATEGORIES BAR ===== */
+  /* ===== CATEGORIES ===== */
   .category-bar{
     display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
     margin-bottom:56px;
@@ -246,7 +250,7 @@
   }
   .swatch.selected{ border-color:var(--ink); transform:scale(1.15);}
   .swatch.swatch-soldout{
-    opacity:.35; cursor:not-allowed;
+    opacity:.35;
     background-image:linear-gradient(135deg, transparent 45%, #A9573F 45%, #A9573F 55%, transparent 55%);
   }
 
@@ -390,27 +394,30 @@
   <nav class="nav-links">
     <a href="#collection">Collection</a>
     <a href="#apropos">À propos</a>
-    <button class="cart-btn" id="open-cart">
-      Panier <span class="cart-count" id="cart-count" data-empty="true">0</span>
+    <button class="cart-btn" id="open-cart" title="Voir le panier">
+      <svg class="cart-icon" viewBox="0 0 24 24">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+      <span class="cart-count" id="cart-count" data-empty="true">0</span>
     </button>
   </nav>
 </header>
 
-<!-- HERO AVEC IMAGE DE FOND -->
 <section class="hero">
+  <img src="images/logo.jpg" alt="Soumnelle Collection" class="hero-logo">
   <h1>Des pièces pensées pour <em>elle</em>, taillées pour durer.</h1>
-  <p>Ensembles, robes et vestes tendance. Commandez facilement en ligne avec livraison à domicile ou au bureau dans toute l'Algérie.</p>
+  <p>Ensembles élégants et tendance. Commandez facilement en ligne avec livraison à domicile ou au bureau dans toute l'Algérie.</p>
   <a href="#collection" class="btn">Découvrir la collection</a>
 </section>
 
-<!-- BANDE DÉFILANTE DE GAUCHE À DROITE -->
 <div class="marquee-container">
   <div class="marquee-track">
-    <div class="marquee-item">L’élégance commence par une belle tenue</div>
-        <div class="marquee-item">Votre style, notre passion ✨</div>
-                <div class="marquee-item">Des tenues élégantes, modernes et pensées pour vous 🌸</div>
-
-
+    <div class="marquee-item">Votre style, notre passion ✨</div>
+    <div class="marquee-item">Des pièces pensées pour sublimer votre féminité 🤍</div>
+    <div class="marquee-item">Parce que chaque femme mérite de se sentir belle ✨</div>
+    <div class="marquee-item">Des tenues élégantes, modernes et pensées pour vous 🌸</div>
   </div>
 </div>
 
@@ -418,7 +425,7 @@
   <div class="section-head">
     <span class="eyebrow">La collection</span>
     <h2>Nouveautés de saison</h2>
-    <p>Choisissez une catégorie, sélectionnez votre couleur et taille, puis ajoutez simplement au panier.</p>
+    <p>Sélectionnez votre couleur et taille, puis ajoutez simplement au panier.</p>
   </div>
 
   <div class="category-bar" id="category-bar"></div>
@@ -540,43 +547,19 @@ async function loadStock(){
   refreshAllStockDisplays();
 }
 
-// CATÉGORIES ET PRODUITS
+// PRODUITS
+// IMPORTANT : les "id" et noms de couleurs ci-dessous doivent être identiques
+// à ceux enregistrés côté serveur (server.js / page /admin/stock), sinon le
+// stock ne pourra pas être retrouvé pour ce produit.
 const PRODUCTS = [
   {
-    id: "veste-cuir",
-    name: "Veste en Similicuir Bomber",
-    price: 7200,
-    sizes: ["S", "M", "L", "XL"],
-    category: "Veste",
-    isNew: true,
-    description: "Veste style bomber oversize en similicuir souple avec ceinture et fermeture éclair. Coupe moderne et confortable, idéale pour la saison.",
-    colors: [
-      { name: "Bordeaux", hex: "#581825", img: "images/veste-bordeaux.jpg" },
-      { name: "Noir", hex: "#1C1C1C", img: "images/veste-noire.jpg" },
-      { name: "Marron", hex: "#4A3525", img: "images/veste-marron.jpg" }
-    ]
-  },
-  {
-    id: "ensemble-brise",
-    name: "Ensemble Brise",
-    price: 4500,
-    sizes: ["S", "M", "L", "XL"],
-    category: "Ensemble",
-    isNew: false,
-    description: "Chemise ample à manches longues et pantalon large assorti, en gaze de coton légère. Coupe oversize et infroissable.",
-    colors: [
-      { name: "Bleu ciel", hex: "#AFC8DE", img: "images/ensemble-bleu.jpg" },
-      { name: "Beige", hex: "#E3D6BC", img: "images/ensemble-beige.jpg" }
-    ]
-  },
-  {
-    id: "robe-samer",
-    name: "Robe Samer",
+    id: "ensemble-samer",
+    name: "Ensemble Samer",
     price: 3700,
     sizes: ["36", "38", "40", "42", "44"],
-    category: "Robe",
+    category: "Ensembles",
     isNew: true,
-    description: "Robe cintrée à la taille avec ceinture en macramé et fentes latérales. Une silhouette fluide et couvrante pour toutes vos sorties.",
+    description: "Ensemble élégant cintré à la taille avec ceinture en macramé et fentes latérales. Une silhouette fluide et couvrante pour toutes vos sorties.",
     colors: [
       { name: "Vert", hex: "#93A184", img: "images/samer-vert.jpg" },
       { name: "Bleu", hex: "#7C93AD", img: "images/samer-bleu.jpg" },
@@ -587,16 +570,43 @@ const PRODUCTS = [
     ]
   },
   {
-    id: "abaya-soie",
+    id: "ensemble-brise",
+    name: "Ensemble Brise",
+    price: 4500,
+    sizes: ["S", "M", "L", "XL"],
+    category: "Ensembles",
+    isNew: false,
+    description: "Chemise ample à manches longues et pantalon large assorti, en gaze de coton légère. Coupe oversize et infroissable.",
+    colors: [
+      { name: "Bleu ciel", hex: "#AFC8DE", img: "images/ensemble-bleu.jpg" },
+      { name: "Beige", hex: "#E3D6BC", img: "images/ensemble-beige.jpg" }
+    ]
+  },
+  {
+    id: "abaya-elegance",
     name: "Abaya Élégance",
     price: 4500,
     sizes: ["S/M", "L/XL"],
-    category: "Abaya",
+    category: "Abayas",
     isNew: true,
     description: "Abaya fluide coupe moderne aux finitions soignées. Tissu léger et drapé impeccable pour un look élégant au quotidien.",
     colors: [
-      { name: "Marron", hex: "#111111", img: "images/abaya-marron.jpg" },
+      { name: "Marron", hex: "#5C4432", img: "images/abaya-marron.jpg" },
       { name: "Rose", hex: "#D6C5B3", img: "images/abaya-rose.jpg" }
+    ]
+  },
+  {
+    id: "veste-bomber",
+    name: "Veste en Similicuir Bomber",
+    price: 7200,
+    sizes: ["S", "M", "L", "XL"],
+    category: "Vestes en cuir",
+    isNew: true,
+    description: "Veste style bomber oversize en similicuir souple avec ceinture et fermeture éclair. Coupe moderne et confortable, idéale pour la saison.",
+    colors: [
+      { name: "Bordeaux", hex: "#581825", img: "images/veste-bordeaux.jpg" },
+      { name: "Noir", hex: "#1C1C1C", img: "images/veste-noire.jpg" },
+      { name: "Marron", hex: "#4A3525", img: "images/veste-marron.jpg" }
     ]
   }
 ];
@@ -723,21 +733,36 @@ PRODUCTS.forEach((p) => {
   refreshBadge(p.id);
 });
 
-/* BARRE DE CATÉGORIES DYNAMIQUES */
+// LISTE DES CATÉGORIES ET GESTION DU FILTRAGE
+const CATEGORIES = ["Tous", "Ensembles", "Robes", "Vestes en cuir", "Abayas"];
 const categoryBar = document.getElementById('category-bar');
-const CATEGORIES = ["Tous", "Ensemble", "Robe", "Veste", "Abaya"];
+
 categoryBar.innerHTML = CATEGORIES.map((c, i) => `
   <button type="button" class="category-pill ${i===0 ? 'active' : ''}" data-cat="${c}">${c}</button>
 `).join("");
+
+// Message affiché lorsqu'une catégorie ne contient aucun article
+const emptyCategoryMsg = document.createElement("div");
+emptyCategoryMsg.id = "empty-category-msg";
+emptyCategoryMsg.style.cssText = "display:none; text-align:center; padding:40px 20px; color:var(--ink-soft); font-size:1rem;";
+emptyCategoryMsg.innerHTML = "<p>Aucun article disponible dans cette catégorie pour le moment.</p>";
+list.after(emptyCategoryMsg);
 
 categoryBar.querySelectorAll(".category-pill").forEach(btn => {
   btn.addEventListener("click", () => {
     categoryBar.querySelectorAll(".category-pill").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
+
     const cat = btn.dataset.cat;
+    let visibleCount = 0;
+
     document.querySelectorAll(".product").forEach(el => {
-      el.classList.toggle("hidden", cat !== "Tous" && el.dataset.category !== cat);
+      const isVisible = (cat === "Tous" || el.dataset.category === cat);
+      el.classList.toggle("hidden", !isVisible);
+      if (isVisible) visibleCount++;
     });
+
+    emptyCategoryMsg.style.display = (visibleCount === 0) ? "block" : "none";
   });
 });
 
@@ -747,12 +772,21 @@ function refreshBadge(pid){
   const badgeEl = document.getElementById(`badge-${pid}`);
   if(!badgeEl) return;
 
-  const allSoldOut = p.colors.every(c => p.sizes.every(sz => remainingStock(pid, c.name, sz) <= 0));
+  const s = pState[pid];
+  const color = p.colors[s.colorIdx];
+  const colorSoldOut = p.sizes.every(sz => remainingStock(pid, color.name, sz) <= 0);
 
   let text, cls;
-  if(allSoldOut){ text = "Épuisé"; cls = "badge-soldout"; }
-  else if(p.isNew){ text = "Nouveauté"; cls = "badge-new"; }
-  else { text = "Disponible"; cls = ""; }
+  if(colorSoldOut){ 
+    text = "Épuisé"; 
+    cls = "badge-soldout"; 
+  } else if(p.isNew){ 
+    text = "Nouveauté"; 
+    cls = "badge-new"; 
+  } else { 
+    text = "Disponible"; 
+    cls = ""; 
+  }
 
   badgeEl.textContent = text;
   badgeEl.classList.remove("badge-new", "badge-soldout");
@@ -797,7 +831,7 @@ function refreshSizesForProduct(pid){
   });
 }
 
-// CHANGEMENT DE COULEUR (SWATCH ET THUMBS)
+// CHANGEMENT DE COULEUR
 document.querySelectorAll(".swatch, .p-thumb").forEach(node => {
   node.addEventListener("click", () => {
     const pid = node.dataset.product;
@@ -826,11 +860,11 @@ document.querySelectorAll(".swatch, .p-thumb").forEach(node => {
       t.classList.toggle("active", i === idx);
     });
 
-    refreshSizesForProduct(pid);
+    refreshProductStockDisplay(pid);
   });
 });
 
-// SÉLECTION DE LA TAILLE
+// TAILLE
 document.querySelectorAll(".size-pill").forEach(pill => {
   pill.addEventListener("click", () => {
     if (pill.classList.contains("sold-out")) return;
@@ -843,7 +877,7 @@ document.querySelectorAll(".size-pill").forEach(pill => {
   });
 });
 
-// GESTION QUANTITÉ (- / +)
+// QUANTITÉ
 document.querySelectorAll("[data-qty]").forEach(btn => {
   btn.addEventListener("click", () => {
     const pid = btn.dataset.product;
@@ -861,7 +895,7 @@ document.querySelectorAll("[data-qty]").forEach(btn => {
   });
 });
 
-// GESTION DU PANIER
+// PANIER
 let cart = [];
 function cartKey(pid, colorName, size) {
   return `${pid}_${colorName}_${size}`;
@@ -874,7 +908,7 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
-// AJOUTER AU PANIER
+// AJOUT PANIER
 document.querySelectorAll("[data-add]").forEach(btn => {
   btn.addEventListener("click", () => {
     const pid = btn.dataset.add;
@@ -888,10 +922,23 @@ document.querySelectorAll("[data-add]").forEach(btn => {
 
     const color = p.colors[s.colorIdx];
     const key = cartKey(pid, color.name, s.size);
+
+    const alreadyInCart = cart.filter(i => i.key === key).reduce((sum,i)=>sum+i.qty,0);
+    const available = remainingStock(pid, color.name, s.size) - alreadyInCart;
+    if(available <= 0){
+      showToast("Désolé, cette couleur/taille n'est plus disponible.");
+      refreshSizesForProduct(pid);
+      return;
+    }
+    const qtyToAdd = Math.min(s.qty, available);
+    if(qtyToAdd < s.qty){
+      showToast(`Il ne reste que ${available} pièce(s) disponible(s) pour cette taille.`);
+    }
+
     const existing = cart.find(item => item.key === key);
 
     if (existing) {
-      existing.qty += s.qty;
+      existing.qty += qtyToAdd;
     } else {
       cart.push({
         key,
@@ -900,18 +947,19 @@ document.querySelectorAll("[data-add]").forEach(btn => {
         price: p.price,
         color: color.name,
         img: color.img,
+        hex: color.hex,
         size: s.size,
-        qty: s.qty
+        qty: qtyToAdd
       });
     }
 
     showToast("Article ajouté au panier");
     updateCartUI();
-    refreshSizesForProduct(pid);
+    refreshProductStockDisplay(pid);
   });
 });
 
-// DRAWER & OPTION WILAYAS
+// DRAWER & WILAYAS
 const drawer = document.getElementById("drawer");
 const overlay = document.getElementById("overlay");
 const openCartBtn = document.getElementById("open-cart");
@@ -941,6 +989,8 @@ function updateCartUI() {
   const checkoutBlock = document.getElementById("checkout-block");
   const drawerFoot = document.getElementById("drawer-foot");
 
+  document.getElementById("cart-success").style.display = "none";
+
   const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
   cartCount.textContent = totalCount;
   cartCount.setAttribute("data-empty", totalCount === 0);
@@ -959,7 +1009,7 @@ function updateCartUI() {
 
   cartItems.innerHTML = cart.map(item => `
     <div class="cart-item">
-      <img src="${item.img || ''}" alt="${item.name}">
+      <img src="${item.img || ''}" alt="${item.name}" style="${item.img ? '' : 'background:'+item.hex+';'}">
       <div class="cart-item-body">
         <strong>${item.name}</strong>
         <div class="cart-item-meta">Couleur : ${item.color} | Taille : ${item.size}</div>
@@ -978,7 +1028,7 @@ function removeCartItem(key) {
   const item = cart.find(i => i.key === key);
   cart = cart.filter(i => i.key !== key);
   updateCartUI();
-  if (item) refreshSizesForProduct(item.id);
+  if (item) refreshProductStockDisplay(item.id);
 }
 
 wilayaSelect.addEventListener("change", calculateTotals);
@@ -993,12 +1043,16 @@ document.querySelectorAll('input[name="delivery"]').forEach(radio => {
   });
 });
 
+function currentWilaya(){
+  const code = parseInt(wilayaSelect.value, 10);
+  return WILAYAS.find(w => w.code === code) || null;
+}
+
 function calculateTotals() {
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
   document.getElementById("t-subtotal").textContent = `${subtotal.toLocaleString('fr-FR')} DA`;
 
-  const selectedWilayaCode = parseInt(wilayaSelect.value, 10);
-  const wilaya = WILAYAS.find(w => w.code === selectedWilayaCode);
+  const wilaya = currentWilaya();
   const deliveryMode = document.querySelector('input[name="delivery"]:checked')?.value;
 
   const pBureau = document.getElementById("price-bureau");
@@ -1024,57 +1078,101 @@ function calculateTotals() {
   document.getElementById("t-grand").textContent = `${grandTotal.toLocaleString('fr-FR')} DA`;
 }
 
-document.getElementById("d-send").addEventListener("click", async () => {
+/* ===== Envoi de la commande vers le serveur (server.js) =====
+   IMPORTANT : server.js attend un objet à plat avec les clés
+   nom, telephone, wilaya, livraison, articles, total, items
+   (et non un objet "customer" imbriqué) — voir /api/order dans server.js. */
+const sendBtn = document.getElementById("d-send");
+
+function buildOrderPayload(){
   const nom = document.getElementById("d-nom").value.trim();
   const tel = document.getElementById("d-tel").value.trim();
-  const wilayaCode = wilayaSelect.value;
+  const wilaya = currentWilaya();
   const deliveryMode = document.querySelector('input[name="delivery"]:checked')?.value;
   const adresse = document.getElementById("d-adresse").value.trim();
 
-  if (!nom || !tel || tel.length < 9) {
-    showToast("Veuillez saisir votre nom et numéro de téléphone valide.");
-    return;
-  }
-  if (!wilayaCode) {
-    showToast("Veuillez sélectionner votre wilaya.");
-    return;
-  }
-  if (!deliveryMode) {
-    showToast("Veuillez choisir un mode de livraison.");
-    return;
-  }
-  if (deliveryMode === "domicile" && !adresse) {
-    showToast("Veuillez renseigner votre adresse de livraison.");
+  if (!nom) { showToast("Merci de renseigner votre nom."); return null; }
+  if (!/^[0-9]{10}$/.test(tel)) { showToast("Le téléphone doit contenir exactement 10 chiffres (ex: 0551234567)."); return null; }
+  if (!wilaya) { showToast("Merci de sélectionner votre wilaya."); return null; }
+  if (!deliveryMode) { showToast("Merci de choisir un mode de livraison."); return null; }
+  if (deliveryMode === "domicile" && !adresse) { showToast("Merci de renseigner votre adresse de livraison."); return null; }
+
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const deliveryPrice = deliveryMode === "bureau" ? wilaya.bureau : wilaya.domicile;
+  const grandTotal = subtotal + deliveryPrice;
+
+  const livraisonLabel = `${deliveryMode === "bureau" ? "Retrait au bureau" : "Domicile"} — ${wilaya.name}${deliveryMode === "domicile" ? " (" + adresse + ")" : ""}`;
+  const articlesLabel = cart.map(item =>
+    `${item.name} (${item.color}, taille ${item.size}, x${item.qty}, ${(item.price*item.qty).toLocaleString('fr-FR')} DA)`
+  ).join(" | ");
+
+  const itemsPayload = cart.map(item => ({
+    product_id: item.id, color: item.color, size: item.size, qty: item.qty
+  }));
+
+  return {
+    nom,
+    telephone: tel,
+    wilaya: wilaya.name,
+    livraison: livraisonLabel,
+    articles: articlesLabel,
+    total: grandTotal.toLocaleString('fr-FR') + " DA",
+    items: itemsPayload
+  };
+}
+
+sendBtn.addEventListener("click", async () => {
+  if (cart.length === 0) return;
+  const payload = buildOrderPayload();
+  if (!payload) return;
+
+  if (!BACKEND_URL) {
+    showToast("La prise de commande n'est pas encore activée sur ce site.");
     return;
   }
 
-  const payload = {
-    customer: { nom, tel, wilayaCode, deliveryMode, adresse },
-    items: cart
-  };
+  sendBtn.disabled = true;
+  sendBtn.textContent = "Envoi en cours...";
 
   try {
-    if (BACKEND_URL) {
-      await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+    const res = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.status === 409) {
+      await loadStock();
+      showToast("Un article de votre panier vient d'être vendu. Vérifiez votre panier.");
+      return;
     }
-    
-    cart = [];
-    updateCartUI();
+    if (!res.ok) throw new Error("Réponse serveur non valide");
+
+    // La cliente ne voit que le message de remerciement.
+    document.getElementById("cart-items").innerHTML = "";
     document.getElementById("checkout-block").style.display = "none";
     document.getElementById("drawer-foot").style.display = "none";
+    document.getElementById("cart-empty").style.display = "none";
     document.getElementById("cart-success").style.display = "block";
+    cart = [];
+    document.getElementById("cart-count").textContent = "0";
+    document.getElementById("cart-count").setAttribute("data-empty", "true");
+    await loadStock();
   } catch (err) {
     console.error("Erreur d'envoi :", err);
-    showToast("Une erreur est survenue lors de l'envoi.");
+    showToast("Votre commande n'a pas pu être envoyée. Vérifiez votre connexion.");
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = "Confirmer la commande";
   }
 });
 
+document.getElementById('footer-whatsapp').addEventListener('click', (e) => {
+  e.preventDefault();
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}`, "_blank");
+});
+
 document.getElementById("year").textContent = new Date().getFullYear();
-document.getElementById("footer-whatsapp").href = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 loadStock();
 </script>
