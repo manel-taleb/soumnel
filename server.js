@@ -119,6 +119,20 @@ const INITIAL_STOCK = [
   });
 });
 
+// Abaya Élégance — tailles groupées S/M et L/XL, couleurs Marron et Rose
+["Marron", "Rose"].forEach((color) => {
+  ["S/M", "L/XL"].forEach((size) => {
+    INITIAL_STOCK.push(["abaya-elegance", color, size, 0]);
+  });
+});
+
+// Veste en Similicuir Bomber — tailles S/M/L/XL, couleurs Bordeaux/Noir/Marron
+["Bordeaux", "Noir", "Marron"].forEach((color) => {
+  ["S", "M", "L", "XL"].forEach((size) => {
+    INITIAL_STOCK.push(["veste-bomber", color, size, 0]);
+  });
+});
+
 const seedStockRow = db.prepare(`
   INSERT OR IGNORE INTO stock (product_id, color, size, quantity) VALUES (?, ?, ?, ?)
 `);
@@ -379,6 +393,8 @@ app.get("/admin/stock", (req, res) => {
   const productLabels = {
     "ensemble-brise": "Ensemble Brise",
     "ensemble-samer": "Ensemble Samer",
+    "abaya-elegance": "Abaya Élégance",
+    "veste-bomber": "Veste en Similicuir Bomber",
   };
 
   const sections = Object.entries(byProduct)
