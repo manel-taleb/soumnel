@@ -167,6 +167,27 @@
     border-radius:2px; color:var(--sage-dark);
     box-shadow:0 2px 10px rgba(53,44,36,.08);
   }
+  .p-badge.badge-new{ color:var(--clay); }
+  .p-badge.badge-soldout{ color:var(--danger); }
+
+  /* ===== CATEGORIES ===== */
+  .category-bar{
+    display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
+    margin-bottom:56px;
+  }
+  .category-pill{
+    padding:10px 22px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:var(--white);
+    font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+    cursor:pointer; color:var(--ink-soft);
+    font-family:'Jost',sans-serif;
+    transition:all .2s;
+  }
+  .category-pill:hover{ border-color:var(--ink); color:var(--ink);}
+  .category-pill.active{ background:var(--ink); color:var(--white); border-color:var(--ink);}
+  .product.hidden{ display:none;}
   .p-thumbs{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
   .p-thumb{
     width:56px; height:56px; border-radius:50%;
@@ -387,6 +408,8 @@
     <p>Choisissez une couleur, une taille, puis ajoutez au panier. Vous pouvez commander plusieurs articles en une seule fois.</p>
   </div>
 
+  <div class="category-bar" id="category-bar"></div>
+
   <div class="products" id="product-list"></div>
 </section>
 
@@ -521,13 +544,21 @@ async function loadStock(){
   refreshAllStockDisplays();
 }
 
+// Pour ajouter un nouvel article : copiez un objet ci-dessous et modifiez ses champs.
+// - "category" : choisissez librement le nom de la catégorie (ex: "Robe", "Veste",
+//   "Ensemble", "Abaya"...). La barre de catégories au-dessus de la collection se
+//   met à jour automatiquement à partir des catégories utilisées ici.
+// - "isNew" : mettez à true pour afficher le badge "Nouveauté" sur cet article.
+//   Le badge de disponibilité ("Disponible" / "Épuisé"), lui, est calculé
+//   automatiquement à partir du vrai stock — inutile de le renseigner à la main.
 const PRODUCTS = [
   {
     id: "ensemble-brise",
     name: "Ensemble Brise",
     price: 4500,
     sizes: ["S", "M", "L", "XL"],
-    badge: "Disponible",
+    category: "Ensemble",
+    isNew: false,
     description: "Chemise ample à manches longues et pantalon large assorti, en gaze de coton légère. Coupe oversize et infroissable, portée ici avec un foulard assorti.",
     colors: [
       { name: "Bleu ciel", hex: "#AFC8DE", img: "images/ensemble-bleu.jpg" },
@@ -539,7 +570,8 @@ const PRODUCTS = [
     name: "Ensemble Samer",
     price: 3700,
     sizes: ["36", "38", "40", "42", "44"],
-    badge: "Nouveauté",
+    category: "Robe",
+    isNew: true,
     description: "Robe cintrée à la taille avec ceinture en macramé et fentes latérales, portée sur un pantalon large. Une silhouette fluide et couvrante, du bureau aux sorties du soir.",
     colors: [
       { name: "Vert", hex: "#93A184", img: "images/samer-vert.jpg" },
@@ -623,9 +655,10 @@ PRODUCTS.forEach((p) => {
 
   const el = document.createElement("article");
   el.className = "product";
+  el.dataset.category = p.category;
   el.innerHTML = `
     <div class="p-gallery">
-      <span class="p-badge">${p.badge}</span>
+      <span class="p-badge" id="badge-${p.id}"></span>
       <img class="p-main" id="main-${p.id}" src="${p.colors[0].img || ''}" alt="${p.name} — ${p.colors[0].name}"
         style="${p.colors[0].img ? '' : 'background:'+p.colors[0].hex+';'}">
       <div class="p-thumbs">
@@ -672,7 +705,44 @@ PRODUCTS.forEach((p) => {
     </div>
   `;
   list.appendChild(el);
+  refreshBadge(p.id);
 });
+
+/* ===== Barre de catégories ===== */
+const categoryBar = document.getElementById('category-bar');
+const CATEGORIES = ["Tous", ...new Set(PRODUCTS.map(p => p.category))];
+categoryBar.innerHTML = CATEGORIES.map((c, i) => `
+  <button type="button" class="category-pill ${i===0 ? 'active' : ''}" data-cat="${c}">${c}</button>
+`).join("");
+categoryBar.querySelectorAll(".category-pill").forEach(btn => {
+  btn.addEventListener("click", () => {
+    categoryBar.querySelectorAll(".category-pill").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const cat = btn.dataset.cat;
+    document.querySelectorAll(".product").forEach(el => {
+      el.classList.toggle("hidden", cat !== "Tous" && el.dataset.category !== cat);
+    });
+  });
+});
+
+/* ===== Badge de disponibilité (calculé à partir du vrai stock) ===== */
+function refreshBadge(pid){
+  const p = PRODUCTS.find(x => x.id === pid);
+  if(!p) return;
+  const badgeEl = document.getElementById(`badge-${pid}`);
+  if(!badgeEl) return;
+
+  const allSoldOut = p.colors.every(c => p.sizes.every(sz => remainingStock(pid, c.name, sz) <= 0));
+
+  let text, cls;
+  if(allSoldOut){ text = "Épuisé"; cls = "badge-soldout"; }
+  else if(p.isNew){ text = "Nouveauté"; cls = "badge-new"; }
+  else { text = "Disponible"; cls = ""; }
+
+  badgeEl.textContent = text;
+  badgeEl.classList.remove("badge-new", "badge-soldout");
+  if(cls) badgeEl.classList.add(cls);
+}
 
 /* ===== Affichage du stock (couleurs / tailles épuisées) ===== */
 function refreshAllStockDisplays(){
@@ -690,6 +760,7 @@ function refreshProductStockDisplay(pid){
     swatchEl.classList.toggle('swatch-soldout', colorSoldOut);
   });
 
+  refreshBadge(pid);
   refreshSizesForProduct(pid);
 }
 
