@@ -145,6 +145,12 @@ const INITIAL_STOCK = [
   });
 });
 
+// Blouse Camélia — taille standard unique (couvre du 36 au 44), tissu import
+// turc, couleurs Bleu ciel / Rose / Jaune / Rouge / Marron. Nouvelle collection.
+["Bleu ciel", "Rose", "Jaune", "Rouge", "Marron"].forEach((color) => {
+  INITIAL_STOCK.push(["blouse-camelia", color, "Standard (36-44)", 0]);
+});
+
 const seedStockRow = db.prepare(`
   INSERT OR IGNORE INTO stock (product_id, color, size, quantity) VALUES (?, ?, ?, ?)
 `);
@@ -409,6 +415,7 @@ app.get("/admin/stock", (req, res) => {
     "robe-hotesse": "Robe d'Hôtesse",
     "abaya-elegance": "Abaya Élégance",
     "veste-bomber": "Veste en Similicuir Bomber",
+    "blouse-camelia": "Blouse Camélia",
   };
 
   const sections = Object.entries(byProduct)
