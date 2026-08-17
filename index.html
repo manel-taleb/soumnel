@@ -633,6 +633,22 @@ const PRODUCTS = [
       { name: "Noir", hex: "#1C1C1C", img: "images/veste-noire.jpg" },
       { name: "Marron", hex: "#4A3525", img: "images/veste-marron.jpg" }
     ]
+  },
+  {
+    id: "blouse-camelia",
+    name: "Blouse Camélia",
+    price: 4900,
+    sizes: ["Standard (36-44)"],
+    category: "Hauts",
+    isNew: true,
+    description: "Blouse ample à col montant froncé et manches larges évasées, resserrée à la taille par un lien fin. Taille standard extensible, adaptée du 36 au 44. Tissu haut de gamme importé de Turquie, doux, fluide et léger.",
+    colors: [
+      { name: "Bleu ciel", hex: "#B7CCDF", img: "images/camelia-bleu.jpg" },
+      { name: "Rose", hex: "#F0D6DC", img: "images/camelia-rose.jpg" },
+      { name: "Jaune", hex: "#F2ECC0", img: "images/camelia-jaune.jpg" },
+      { name: "Rouge", hex: "#C6392C", img: "images/camelia-rouge.jpg" },
+      { name: "Marron", hex: "#8B5A45", img: "images/camelia-marron.jpg" }
+    ]
   }
 ];
 
@@ -759,7 +775,7 @@ PRODUCTS.forEach((p) => {
 });
 
 // LISTE DES CATÉGORIES ET GESTION DU FILTRAGE
-const CATEGORIES = ["Tous", "Ensembles", "Robes", "Vestes en cuir", "Abayas"];
+const CATEGORIES = ["Tous", "Ensembles", "Robes", "Vestes en cuir", "Abayas", "Hauts"];
 const categoryBar = document.getElementById('category-bar');
 
 categoryBar.innerHTML = CATEGORIES.map((c, i) => `
